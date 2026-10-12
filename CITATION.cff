@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the authors and accompanying paper. The manuscript is under revision; final publication metadata will be added when available."
+title: "Tusi and Not-Tusi Interactive Experiments"
+type: software
+version: 1.1.0
+date-released: 2026-10-12
+authors:
+  - family-names: Shapiro
+    given-names: "Arthur G."
+  - family-names: Hurter
+    given-names: Christophe
+abstract: >-
+  Six offline, no-build interactive experiments for understanding Tusi and
+  Not-Tusi motion, phase control, parameter sets, fixed-diameter 3-D Tusi,
+  and carrier-ring 3-D Not-Tusi constructions.
+keywords:
+  - Tusi couple
+  - visual perception
+  - emergence
+  - animation
+license: MIT
+preferred-citation:
+  type: article
+  title: "The Tusi and Not-Tusi Illusions: A Tool for Studying Emergence in Two and Three Dimensions"
+  authors:
+    - family-names: Shapiro
+      given-names: "Arthur G."
+    - family-names: Hurter
+      given-names: Christophe
+  year: 2026

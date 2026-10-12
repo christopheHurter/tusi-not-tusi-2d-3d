@@ -1,0 +1,25 @@
+{
+  "name": "tusi-not-tusi-2d-3d",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Six offline, no-build experiments for understanding the Tusi and Not-Tusi illusions.",
+  "author": "Arthur G. Shapiro and Christophe Hurter",
+  "license": "MIT",
+  "keywords": [
+    "Tusi couple",
+    "visual perception",
+    "emergence",
+    "animation"
+  ],
+  "scripts": {
+    "serve": "node scripts/serve.mjs",
+    "build:publication": "node scripts/build-publication.mjs",
+    "test": "node --test tests/core-config.test.mjs tests/core-interpolation-presets.test.mjs tests/core-math.test.mjs tests/pedagogy.test.mjs tests/release.test.mjs tests/publication.test.mjs",
+    "test:browser": "node tests/browser-smoke.mjs",
+    "test:release": "npm test && npm run test:browser"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

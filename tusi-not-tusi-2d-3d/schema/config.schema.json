@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config.schema.json",
+  "title": "Tusi/Not-Tusi configuration",
+  "description": "Canonical schemaVersion 1 configuration accepted by the publication reference implementation.",
+  "oneOf": [
+    { "$ref": "#/$defs/tusi2d" },
+    { "$ref": "#/$defs/notTusi2d" },
+    { "$ref": "#/$defs/tusi3d" },
+    { "$ref": "#/$defs/notTusi3d" }
+  ],
+  "$defs": {
+    "center2d": {
+      "type": "array",
+      "description": "Cartesian [x, y] centre; mathematical y is positive upward.",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2,
+      "default": [0, 0]
+    },
+    "center3d": {
+      "type": "array",
+      "description": "Right-handed, z-up Cartesian [x, y, z] centre.",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3,
+      "default": [0, 0, 0]
+    },
+    "phase2d": {
+      "type": "object",
+      "description": "Two-dimensional phase law: phase_i = winding * theta_i.",
+      "properties": {
+        "winding": { "type": "number", "default": 0 }
+      },
+      "required": ["winding"],
+      "additionalProperties": false
+    },
+    "phase3d": {
+      "type": "object",
+      "description": "Three-dimensional Not-Tusi phase law: twist*longitude + pitch*colatitude + height*z.",
+      "properties": {
+        "twist": { "type": "number", "default": 0 },
+        "pitch": { "type": "number", "default": 0 },
+        "height": { "type": "number", "default": 0 }
+      },
+      "required": ["twist", "pitch", "height"],
+      "additionalProperties": false
+    },
+    "tusiPhase3d": {
+      "type": "object",
+      "description": "Euler-wound 3-D Tusi motion phase: phase_i = winding * parameter_i.",
+      "properties": {
+        "winding": { "type": "integer", "default": 1 }
+      },
+      "required": ["winding"],
+      "additionalProperties": false
+    },
+    "seed3d": {
+      "type": "array",
+      "description": "Non-zero seed direction. The configuration factory normalizes it before storage.",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3,
+      "not": { "const": [0, 0, 0] },
+      "default": [0.42, 0.61, 0.67]
+    },
+    "orientationWindings3d": {
+      "type": "object",
+      "description": "Integer turns about fixed global X, Y, and Z axes. Combined with periodic real bends, these close the endpoint path smoothly.",
+      "properties": {
+        "x": { "type": "integer", "default": 1 },
+        "y": { "type": "integer", "default": 2 },
+        "z": { "type": "integer", "default": 3 }
+      },
+      "required": ["x", "y", "z"],
+      "additionalProperties": false
+    },
+    "orientationBends3d": {
+      "type": "object",
+      "description": "Real bend amplitudes in radians. Each axis adds bend*sin(parameter) to its integer-turn angle, preserving smooth closure. Zero bends reproduce the unbent presets.",
+      "properties": {
+        "x": { "type": "number", "default": 0 },
+        "y": { "type": "number", "default": 0 },
+        "z": { "type": "number", "default": 0 }
+      },
+      "required": ["x", "y", "z"],
+      "additionalProperties": false
+    },
+    "animation": {
+      "type": "object",
+      "description": "Serializable animation state. These values do not change model geometry.",
+      "properties": {
+        "time": { "type": "number", "default": 0 },
+        "speed": { "type": "number", "minimum": 0, "default": 1 },
+        "playing": { "type": "boolean", "default": true }
+      },
+      "required": ["time", "speed", "playing"],
+      "additionalProperties": false
+    },
+    "visualization": {
+      "type": "object",
+      "description": "Renderer preferences. These values do not enter the equations.",
+      "properties": {
+        "showPaths": { "type": "boolean", "default": true },
+        "palette": {
+          "type": "string",
+          "enum": ["phase", "radius", "direction", "mono"],
+          "default": "phase"
+        },
+        "pointSize": { "type": "number", "exclusiveMinimum": 0, "default": 5 }
+      },
+      "required": ["showPaths", "palette", "pointSize"],
+      "additionalProperties": false
+    },
+    "baseConfig": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "kind": {
+          "type": "string",
+          "enum": ["tusi-2d", "not-tusi-2d", "tusi-3d", "not-tusi-3d"]
+        },
+        "center": { "type": "array" },
+        "radius": { "type": "number", "exclusiveMinimum": 0, "default": 1 },
+        "pointCount": { "type": "integer", "minimum": 1 },
+        "angularSpeed": { "type": "number", "default": 1 },
+        "sampling": {
+          "type": "string",
+          "enum": ["full-circle", "half-circle", "fibonacci-sphere"]
+        },
+        "phase": { "type": "object" },
+        "animation": { "$ref": "#/$defs/animation" },
+        "visualization": { "$ref": "#/$defs/visualization" }
+      },
+      "required": [
+        "schemaVersion",
+        "kind",
+        "center",
+        "radius",
+        "pointCount",
+        "angularSpeed",
+        "sampling",
+        "phase",
+        "animation",
+        "visualization"
+      ]
+    },
+    "notTusiFields": {
+      "type": "object",
+      "properties": {
+        "orbitRatio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        },
+        "circulation": {
+          "type": "string",
+          "enum": ["forward", "reverse", "alternating"],
+          "default": "forward"
+        }
+      },
+      "required": ["orbitRatio", "circulation"]
+    },
+    "tusi2d": {
+      "title": "2-D Tusi configuration",
+      "allOf": [
+        { "$ref": "#/$defs/baseConfig" },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "tusi-2d" },
+            "center": { "$ref": "#/$defs/center2d" },
+            "pointCount": { "type": "integer", "minimum": 1, "default": 24 },
+            "sampling": {
+              "type": "string",
+              "enum": ["full-circle", "half-circle"],
+              "default": "full-circle"
+            },
+            "phase": { "$ref": "#/$defs/phase2d" }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "notTusi2d": {
+      "title": "2-D Not-Tusi configuration",
+      "allOf": [
+        { "$ref": "#/$defs/baseConfig" },
+        { "$ref": "#/$defs/notTusiFields" },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "not-tusi-2d" },
+            "center": { "$ref": "#/$defs/center2d" },
+            "pointCount": { "type": "integer", "minimum": 1, "default": 24 },
+            "sampling": {
+              "type": "string",
+              "enum": ["full-circle", "half-circle"],
+              "default": "full-circle"
+            },
+            "phase": { "$ref": "#/$defs/phase2d" }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "tusi3d": {
+      "title": "3-D Tusi configuration",
+      "allOf": [
+        { "$ref": "#/$defs/baseConfig" },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "tusi-3d" },
+            "center": { "$ref": "#/$defs/center3d" },
+            "pointCount": { "type": "integer", "minimum": 1, "default": 200 },
+            "sampling": { "const": "full-circle" },
+            "phase": { "$ref": "#/$defs/tusiPhase3d" },
+            "seed": { "$ref": "#/$defs/seed3d" },
+            "orientationWindings": { "$ref": "#/$defs/orientationWindings3d" },
+            "orientationBends": { "$ref": "#/$defs/orientationBends3d" }
+          },
+          "required": ["seed", "orientationWindings", "orientationBends"]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "notTusi3d": {
+      "title": "3-D Not-Tusi configuration",
+      "allOf": [
+        { "$ref": "#/$defs/baseConfig" },
+        { "$ref": "#/$defs/notTusiFields" },
+        {
+          "type": "object",
+          "properties": {
+            "kind": { "const": "not-tusi-3d" },
+            "center": { "$ref": "#/$defs/center3d" },
+            "pointCount": { "type": "integer", "minimum": 1, "default": 260 },
+            "sampling": { "const": "fibonacci-sphere" },
+            "phase": { "$ref": "#/$defs/phase3d" },
+            "circlePlane": {
+              "type": "string",
+              "enum": ["meridian", "azimuthal"],
+              "default": "meridian"
+            }
+          },
+          "required": ["circlePlane"]
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Offline documentation for the Tusi and Not-Tusi interactive supplement.">
+    <link rel="stylesheet" href="assets/styles.css">
+    <title>Documentation — Tusi and Not-Tusi</title>
+    <style>
+      .document-shell {
+        width: min(100% - 2rem, 72rem);
+        margin: 0 auto;
+        padding: 2rem 0 4rem;
+      }
+      .document-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.25rem;
+      }
+      .document-toolbar label { font-weight: 700; }
+      .document-toolbar select {
+        min-width: min(100%, 19rem);
+        padding: 0.55rem 0.7rem;
+      }
+      .rendered-document {
+        background: #fff;
+        border: 1px solid var(--border, #d6dce2);
+        border-radius: 0.8rem;
+        padding: clamp(1.25rem, 4vw, 3rem);
+        color: #202832;
+        line-height: 1.65;
+      }
+      .rendered-document h1,
+      .rendered-document h2,
+      .rendered-document h3 { scroll-margin-top: 1rem; }
+      .rendered-document h2,
+      .rendered-document h3 { margin-top: 1.8em; }
+      .rendered-document pre {
+        overflow-x: auto;
+        padding: 1rem;
+        border-radius: 0.45rem;
+        background: #101923;
+        color: #f4f7fa;
+      }
+      .rendered-document :not(pre) > code {
+        padding: 0.1em 0.32em;
+        border-radius: 0.25rem;
+        background: #edf1f4;
+      }
+      .document-table-wrap { overflow-x: auto; }
+      .rendered-document table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+      .rendered-document th,
+      .rendered-document td {
+        padding: 0.55rem 0.7rem;
+        border: 1px solid #cfd6dc;
+        text-align: left;
+        vertical-align: top;
+      }
+      .rendered-document th { background: #edf2f5; }
+      .rendered-document blockquote {
+        margin-left: 0;
+        padding-left: 1rem;
+        border-left: 0.25rem solid #8da2b2;
+        color: #52616d;
+      }
+      .document-error {
+        padding: 1rem;
+        border: 1px solid #b53a3a;
+        border-radius: 0.5rem;
+        background: #fff4f4;
+      }
+      @media (max-width: 42rem) {
+        .document-shell { width: min(100% - 1rem, 72rem); padding-top: 1rem; }
+        .rendered-document { padding: 1rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#document-content">Skip to documentation</a>
+    <header class="site-header">
+      <a class="brand" href="index.html">← Tusi / Not-Tusi</a>
+      <nav class="header-links" aria-label="Documentation links">
+        <a href="docs-viewer.html?doc=README.md">Quick start</a>
+        <a href="docs-viewer.html?doc=docs/API.md">API</a>
+        <a href="docs-viewer.html?doc=docs/PRESETS.md">Presets</a>
+      </nav>
+    </header>
+    <main id="document-content" class="document-shell">
+      <div class="document-toolbar">
+        <label for="doc-select">Document</label>
+        <select id="doc-select"></select>
+        <span id="document-status" class="message" role="status" aria-live="polite">Loading documentation…</span>
+      </div>
+      <article id="rendered-document" class="rendered-document"></article>
+    </main>
+    <script type="module" src="src/app/docs-viewer.js"></script>
+  </body>
+</html>
